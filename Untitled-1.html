@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Art Portfolio</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;family=Syne:wght@400;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet" />
+    <link href="https://db.onlinewebfonts.com/c/9366bd460113d8bf675fd2bdfe1ce764?family=The+Seasons" rel="stylesheet" type="text/css" />
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      .folder-card {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .folder-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      .folder-tab {
+        position: absolute;
+        top: -14px;
+        left: 16px;
+        width: 60px;
+        height: 18px;
+        border-radius: 6px 6px 0 0;
+        transition: background 0.3s;
+      }
+
+      .art-piece {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUp 0.4s ease forwards;
+      }
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .back-btn {
+        transition: all 0.2s ease;
+      }
+      .back-btn:hover {
+        transform: translateX(-4px);
+      }
+
+      .page-enter {
+        animation: pageIn 0.5s ease forwards;
+      }
+      @keyframes pageIn {
+        from {
+          opacity: 0;
+          transform: scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .art-placeholder::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.15;
+      }
+
+      .tag {
+        transition: background 0.2s;
+      }
+    </style>
+    <style>
+      body {
+        box-sizing: border-box;
+      }
+    </style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  </head>
+  <body class="h-full">
+    <div id="app" class="h-full w-full overflow-auto" style="background: #f5f0e8; color: #3a3228; font-family: 'DM Mono', monospace">
+      <!-- Folder View -->
+      <div id="folder-view" class="min-h-full flex flex-col items-center justify-center px-6">
+        <header class="text-center mb-12">
+          <h1 id="artist-name" class="text-5xl font-bold tracking-tight mb-3" style="font-family: 'The Seasons', sans-serif; color: #e3a130">Ran's Portfolio</h1>
+          <p id="tagline" class="text-sm tracking-widest uppercase" style="font-family: 'Poppins', sans-serif; color: #8a7a62">Enjoy the whimsical world of colors and shapes</p>
+        </header>
+        <div class="relative w-48 h-40 cursor-pointer group" id="folder-icon" onclick="openFolder()">
+          <!-- Folder tab -->
+          <div class="absolute -top-6 left-0 w-24 h-8 rounded-t-lg" style="background: #e3a130"></div>
+          <!-- Folder body -->
+          <div class="w-full h-full rounded-lg" style="background: #e3a130; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); transition: transform 0.3s ease, box-shadow 0.3s ease">
+            <div class="w-full h-full flex items-center justify-center"></div>
+          </div>
+        </div>
+        <p class="text-center mt-8 text-sm" style="color: #8a7a62">click me!</p>
+      </div>
+      <!-- Art View -->
+      <div id="art-view" class="hidden min-h-full">
+        <div class="flex gap-8 p-6">
+          <!-- Folder sidebar -->
+          <div class="flex-shrink-0 flex flex-col items-center pt-12">
+            <div class="relative w-40 h-32 cursor-pointer group mb-4" onclick="closeFolder()">
+              <!-- Folder tab -->
+              <div class="absolute -top-5 left-0 w-20 h-6 rounded-t-lg" style="background: #e3a130"></div>
+              <!-- Folder body -->
+              <div class="w-full h-full rounded-lg" style="background: #e3a130; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); transition: transform 0.3s ease, box-shadow 0.3s ease">
+                <div class="w-full h-full flex items-center justify-center"></div>
+              </div>
+            </div>
+            <p class="text-xs text-center" style="color: #8a7a62">Click to close</p>
+            <!-- Social media links -->
+            <div class="flex flex-col gap-2 mt-6 items-center">
+              <a href="https://x.com/restoranberlari" target="_blank" class="tag text-xs px-3 py-1.5 rounded-full" style="font-family: 'Poppins', sans-serif; background: #3a3228; color: #d4c8a8; border: 1px solid #3a3228; text-decoration: none;">Twitter</a>
+              <a href="https://instagram.com/ranrest_study" target="_blank" class="tag text-xs px-3 py-1.5 rounded-full" style="font-family: 'Poppins', sans-serif; background: #3a3228; color: #d4c8a8; border: 1px solid #3a3228; text-decoration: none;">Instagram</a>
+            </div>
+          </div>
+          <!-- Content area -->
+          <main class="flex-1 pt-12">
+            <div class="mb-8">
+              <h1 id="artist-name-art" class="text-3xl font-bold mb-1" style="font-family: 'The Seasons', sans-serif; color: #e3a130">Ran's Portfolio</h1>
+              <p id="tagline-art" class="text-xs tracking-widest uppercase" style="font-family: 'Poppins', sans-serif; color: #8a7a62">Enjoy the whimsical world of colors and shapes</p>
+            </div>
+            <!-- Filter tags -->
+            <div id="filter-tags" class="flex flex-wrap gap-2 mb-8"></div>
+            <!-- Art grid -->
+            <div id="art-grid" class="flex flex-wrap gap-2 pb-20" style="align-items: flex-start;"></div>
+          </main>
+        </div>
+      </div>
+    </div>
+    <script>
+      // --- DATA ---
+      const artCollection = [
+        { theme: "Soft Painterly", image: "https://pbs.twimg.com/media/G45FPGXaEAAn1h-?format=jpg&name=large" },
+        { theme: "Soft Painterly", image: "https://www.image2url.com/r2/default/images/1776593142742-6f1793a1-eaea-4e7f-9809-a837d5a85c82.jpg" },
+        { theme: "Soft Painterly", image: "https://pbs.twimg.com/media/GyEPN1-bYAAwgf3?format=jpg&name=medium" },
+        { theme: "Soft Painterly", image: "https://pbs.twimg.com/media/GyEO1i5aQAA7Kyw?format=jpg&name=medium" },
+        { theme: "Soft Painterly", image: "https://pbs.twimg.com/media/HEULqGobYAI5lec?format=jpg&name=medium" },
+        { theme: "Soft Painterly", image: "https://pbs.twimg.com/media/G-C8iCiaoAA1BTg?format=jpg&name=medium" },
+        { theme: "Textured Painterly", image: "https://pbs.twimg.com/media/G4MpnFIWwAAKlEc?format=jpg&name=large" },
+        { theme: "Couple", image: "https://pbs.twimg.com/media/HDR8GsKaYAAYmVB?format=jpg&name=large" },
+        { theme: "Art study", image: "https://pbs.twimg.com/media/HEkglBgbwAAiit9?format=jpg&name=large" },
+        { theme: "Art study", image: "https://pbs.twimg.com/media/HEYRdGcbIAAwtwi?format=jpg&name=large" },
+      ];
+
+      let activeFilter = "All";
+      const primaryAccent = "#e3a130";
+
+      // --- FOLDER FUNCTIONS ---
+      function openFolder() {
+        document.getElementById("folder-view").classList.add("hidden");
+        document.getElementById("art-view").classList.remove("hidden");
+        renderFilters();
+        renderArt();
+        lucide.createIcons();
+      }
+
+      function closeFolder() {
+        document.getElementById("art-view").classList.add("hidden");
+        document.getElementById("folder-view").classList.remove("hidden");
+        activeFilter = "All";
+      }
+
+      // --- RENDER FILTERS ---
+      function renderFilters() {
+        const container = document.getElementById("filter-tags");
+        const themes = ["All", ...new Set(artCollection.map((a) => a.theme))];
+        const styles = [...new Set(artCollection.map((a) => a.style).filter(Boolean))];
+        const all = [...themes, ...styles.filter((s) => !themes.includes(s))];
+
+        container.innerHTML = "";
+        all.forEach((tag) => {
+          const btn = document.createElement("button");
+          btn.className = "tag text-xs px-3 py-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2";
+          const isActive = tag === activeFilter;
+          btn.style.background = isActive ? primaryAccent : "#3a3228";
+          btn.style.color = isActive ? "#fff" : "#d4c8a8";
+          btn.style.border = `1px solid ${isActive ? primaryAccent : "#3a3228"}`;
+          btn.style.fontWeight = isActive ? "600" : "400";
+          btn.textContent = tag;
+          btn.onclick = () => {
+            activeFilter = tag;
+            renderFilters();
+            renderArt();
+          };
+          container.appendChild(btn);
+        });
+      }
+
+      // --- RENDER ART ---
+      function renderArt() {
+        const grid = document.getElementById("art-grid");
+        grid.innerHTML = "";
+        const filtered = activeFilter === "All" ? artCollection : artCollection.filter((a) => a.theme === activeFilter || a.style === activeFilter);
+        const withImages = filtered.filter((a) => a.image);
+
+        filtered.forEach((art, i) => {
+          const card = document.createElement("div");
+          card.className = "art-piece rounded-lg overflow-hidden";
+          card.style.width = "calc(25% - 6px)";
+          card.style.animationDelay = `${i * 0.07}s`;
+          card.innerHTML = `
+      <div style="position:relative; width:100%; padding-top:100%; overflow:hidden;">
+        <img src="${art.image}" alt="${art.title || ""}" loading="lazy" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block;" onerror="this.style.display='none';">
+      </div>
+    `;
+          grid.appendChild(card);
+        });
+      }
+
+      // --- ELEMENT SDK ---
+      const defaultConfig = {
+        artist_name: "Ran's Portfolio",
+        tagline: "enjoy the whimsical world of colors and shapes",
+        background_color: "#1a1714",
+        surface_color: "#262017",
+        text_color: "#e8dcc8",
+        primary_action: "#e3a130",
+        secondary_action: "#8a7a62",
+        font_family: "Syne",
+        font_size: 16,
+      };
+
+      function applyConfig(config) {
+        const bg = config.background_color || defaultConfig.background_color;
+        const text = config.text_color || defaultConfig.text_color;
+        const primary = config.primary_action || defaultConfig.primary_action;
+        const secondary = config.secondary_action || defaultConfig.secondary_action;
+        const font = config.font_family || defaultConfig.font_family;
+        const size = config.font_size || defaultConfig.font_size;
+
+        const app = document.getElementById("app");
+        app.style.background = bg;
+        app.style.color = text;
+
+        // Update folder view
+        document.getElementById("artist-name").textContent = config.artist_name || defaultConfig.artist_name;
+        document.getElementById("artist-name").style.color = primary;
+        document.getElementById("artist-name").style.fontFamily = `${font}, 'Syne', sans-serif`;
+        document.getElementById("artist-name").style.fontSize = `${size * 3}px`;
+
+        document.getElementById("tagline").textContent = config.tagline || defaultConfig.tagline;
+        document.getElementById("tagline").style.color = secondary;
+        document.getElementById("tagline").style.fontSize = `${size * 0.8}px`;
+
+        // Update art view
+        document.getElementById("artist-name-art").textContent = config.artist_name || defaultConfig.artist_name;
+        document.getElementById("artist-name-art").style.color = primary;
+        document.getElementById("artist-name-art").style.fontFamily = `${font}, 'Syne', sans-serif`;
+        document.getElementById("artist-name-art").style.fontSize = `${size * 2}px`;
+
+        document.getElementById("tagline-art").textContent = config.tagline || defaultConfig.tagline;
+        document.getElementById("tagline-art").style.color = secondary;
+        document.getElementById("tagline-art").style.fontSize = `${size * 0.7}px`;
+      }
+
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (v) => {
+                config.background_color = v;
+                window.elementSdk.setConfig({ background_color: v });
+              },
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (v) => {
+                config.surface_color = v;
+                window.elementSdk.setConfig({ surface_color: v });
+              },
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (v) => {
+                config.text_color = v;
+                window.elementSdk.setConfig({ text_color: v });
+              },
+            },
+            {
+              get: () => config.primary_action || defaultConfig.primary_action,
+              set: (v) => {
+                config.primary_action = v;
+                window.elementSdk.setConfig({ primary_action: v });
+              },
+            },
+            {
+              get: () => config.secondary_action || defaultConfig.secondary_action,
+              set: (v) => {
+                config.secondary_action = v;
+                window.elementSdk.setConfig({ secondary_action: v });
+              },
+            },
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (v) => {
+              config.font_family = v;
+              window.elementSdk.setConfig({ font_family: v });
+            },
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (v) => {
+              config.font_size = v;
+              window.elementSdk.setConfig({ font_size: v });
+            },
+          },
+        }),
+        mapToEditPanelValues: (config) =>
+          new Map([
+            ["artist_name", config.artist_name || defaultConfig.artist_name],
+            ["tagline", config.tagline || defaultConfig.tagline],
+          ]),
+      });
+
+      // Init
+      lucide.createIcons();
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'9eeaa60db7647a21',t:'MTc3NjU4ODQ5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener) document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState && ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
